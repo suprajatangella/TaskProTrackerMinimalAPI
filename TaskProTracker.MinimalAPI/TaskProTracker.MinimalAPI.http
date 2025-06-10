@@ -1,0 +1,16 @@
+﻿@TaskProTracker.MinimalAPI_HostAddress = https://localhost:7076
+
+POST {{TaskProTracker.MinimalAPI_HostAddress}}/tasks
+Content-Type: application/json
+{
+  "title":"building api",
+  "isCompleted":true,
+  "projectId":3
+}
+
+###
+
+@id=0
+DELETE {{TaskProTracker.MinimalAPI_HostAddress}}/tasks/1
+
+###
