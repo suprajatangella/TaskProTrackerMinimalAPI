@@ -14,3 +14,59 @@ Content-Type: application/json
 DELETE {{TaskProTracker.MinimalAPI_HostAddress}}/tasks/1
 
 ###
+
+POST {{TaskProTracker.MinimalAPI_HostAddress}}/register
+Content-Type: application/json
+
+{
+  "name":"Supraja",
+  "email":"supraja@gmail.com",
+  "password":"supraja@123",
+  "role":"User"
+}
+
+###
+
+POST {{TaskProTracker.MinimalAPI_HostAddress}}/register
+Content-Type: application/json
+
+{
+  //RegisterUserDto
+}
+
+###
+
+GET {{TaskProTracker.MinimalAPI_HostAddress}}/tasks
+
+###
+
+POST {{TaskProTracker.MinimalAPI_HostAddress}}/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW5AZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTc0OTY4NTMwOCwiaXNzIjoibG9jYWwtYXV0aCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcwNzYifQ.tXAlrTusUnEyOvzM-gDAWkV9w3pPbJLRava13JHgj9c
+{
+  "title":"WebApp",
+  "description":"testing web app",
+  "projectId":4
+}
+
+###
+
+POST {{TaskProTracker.MinimalAPI_HostAddress}}/login
+Content-Type: application/json
+
+{
+  
+   "email":"Admin@gmail.com",
+   "passwordHash":"Admin@123"
+}
+
+###
+
+POST {{TaskProTracker.MinimalAPI_HostAddress}}/tasks
+Content-Type: application/json
+
+{
+  //TaskItemDTO
+}
+
+###
