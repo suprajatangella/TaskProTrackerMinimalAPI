@@ -10,7 +10,7 @@ namespace TaskProTracker.MinimalAPI.Data
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 
             // Use the same connection string you'd use in appsettings.json
-            optionsBuilder.UseSqlServer("Server=(localdb)\\projectmodels;Database=TaskProDb;Trusted_Connection=True;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\Commentmodels;Database=TaskProDb;Trusted_Connection=True;TrustServerCertificate=True;");
 
             return new AppDbContext(optionsBuilder.Options);
         }
