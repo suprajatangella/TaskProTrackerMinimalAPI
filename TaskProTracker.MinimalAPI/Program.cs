@@ -1,11 +1,21 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 using TaskProTracker.MinimalAPI.Data;
 using TaskProTracker.MinimalAPI.Endpoints;
+using TaskProTracker.MinimalAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Logging
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Error()
+    .WriteTo.File("Logs/errors.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Configure Services
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -46,6 +56,9 @@ var app = builder.Build();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Use the global error handler middleware
+app.UseGlobalExceptionHandler();
 
 // Map endpoints
 app.MapTaskEndpoints();
