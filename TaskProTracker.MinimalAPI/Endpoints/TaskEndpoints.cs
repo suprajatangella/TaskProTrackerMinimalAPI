@@ -42,7 +42,7 @@ namespace TaskProTracker.MinimalAPI.Endpoints
             {
                 IsCompleted = taskItemDTO.IsCompleted,
                 Title = taskItemDTO.Title,
-                CommentId = taskItemDTO.CommentId
+                ProjectId = taskItemDTO.ProjectId
             };
 
             db.Tasks.Add(taskItem);
@@ -61,7 +61,7 @@ namespace TaskProTracker.MinimalAPI.Endpoints
 
             task.Title = taskItemDTO.Title;
             task.IsCompleted = taskItemDTO.IsCompleted;
-            task.CommentId = taskItemDTO.CommentId;
+            task.ProjectId = taskItemDTO.ProjectId;
 
             db.Tasks.Update(task);
             await db.SaveChangesAsync();
