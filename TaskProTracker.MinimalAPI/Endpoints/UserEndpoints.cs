@@ -13,7 +13,7 @@ namespace TaskProTracker.MinimalAPI.Endpoints
 {
     public static class UserEndpoints
     {
-        public static void MapUserEndpoints(this WebApplication app)
+        public static void MapUserEndpoints(this IEndpointRouteBuilder app)
         {
             app.MapPost("/login", async (LoginUserDto userDto, AppDbContext db, IConfiguration config) =>
             {
