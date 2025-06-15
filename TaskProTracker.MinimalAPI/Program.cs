@@ -6,6 +6,8 @@ using System.Text;
 using TaskProTracker.MinimalAPI.Data;
 using TaskProTracker.MinimalAPI.Endpoints;
 using TaskProTracker.MinimalAPI.Middlewares;
+using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +51,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               };
           });
 builder.Services.AddAuthorization();
+builder.Services.AddEndpointsApiExplorer();
+
+//builder.Services.AddSwaggerGen(options =>
+//{
+//    options.SwaggerDoc("v1", new OpenApiInfo
+//    {
+//        Title = "TaskProTracker API",
+//        Version = "v1",
+//        Description = "API for TaskProTracker application"
+//    });
+//});
 
 var app = builder.Build();
 
@@ -60,11 +73,26 @@ app.UseAuthorization();
 // Use the global error handler middleware
 app.UseGlobalExceptionHandler();
 
+
+// Enable Swagger middleware
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "v1");
+    });
+
+}
+
 // Map endpoints
 app.MapTaskEndpoints();
 app.MapProjectEndpoints();
 app.MapCommentEndpoints();
 app.MapUserEndpoints();
+
+
 
 app.Run();
 
