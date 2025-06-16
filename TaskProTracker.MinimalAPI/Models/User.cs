@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 
 namespace TaskProTracker.MinimalAPI.Models
 {
@@ -9,7 +10,9 @@ namespace TaskProTracker.MinimalAPI.Models
         public string Email { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
         public string Role { get; set; } = "User";
+        [NotMapped]
         public ICollection<Project> Projects { get; set; } = new List<Project>();
+        [NotMapped]
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

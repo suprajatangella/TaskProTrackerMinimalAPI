@@ -1,4 +1,6 @@
-﻿namespace TaskProTracker.MinimalAPI.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TaskProTracker.MinimalAPI.Models
 {
     public class Project
     {
@@ -7,8 +9,9 @@
         public string Description { get; set; } = string.Empty;
 
         public int UserId { get; set; }
+        [NotMapped]
         public User? User { get; set; }
-
+        [NotMapped]
         public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
     }
 }

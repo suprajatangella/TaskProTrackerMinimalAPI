@@ -25,7 +25,7 @@ namespace TaskProTracker.MinimalAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Comments",
+                name: "Projects",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -36,9 +36,9 @@ namespace TaskProTracker.MinimalAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.PrimaryKey("PK_Projects", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_Users_UserId",
+                        name: "FK_Projects_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -53,15 +53,15 @@ namespace TaskProTracker.MinimalAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
-                    CommentId = table.Column<int>(type: "int", nullable: false)
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tasks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tasks_Comments_CommentId",
-                        column: x => x.CommentId,
-                        principalTable: "Comments",
+                        name: "FK_Tasks_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -118,7 +118,7 @@ namespace TaskProTracker.MinimalAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Comments");
+                name: "Projects");
 
             migrationBuilder.DropTable(
                 name: "Tasks");

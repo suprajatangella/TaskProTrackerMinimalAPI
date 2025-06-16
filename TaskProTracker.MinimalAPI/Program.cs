@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
 using TaskProTracker.MinimalAPI.Data;
 using TaskProTracker.MinimalAPI.Endpoints;
 using TaskProTracker.MinimalAPI.Middlewares;
+using TaskProTracker.MinimalAPI.Transformers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,7 +53,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 // Configure Swagger
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi("v1", options =>
+{
+    options.AddHeader("Version", "1.0");
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+});
 
 var app = builder.Build();
 
@@ -71,7 +77,6 @@ if (app.Environment.IsDevelopment())
     {
         options.SwaggerEndpoint("/openapi/v1.json", "v1");
     });
-
 }
 
 // Map endpoints

@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "title":"building api",
   "isCompleted":true,
-  "CommentId":3
+  "ProjectId":3
 }
 
 ###
@@ -46,7 +46,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hc
 {
   "title":"WebApp",
   "description":"testing web app",
-  "CommentId":4
+  "ProjectId":4
 }
 
 ###
