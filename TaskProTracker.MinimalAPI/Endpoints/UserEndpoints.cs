@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
@@ -8,6 +10,7 @@ using System.Text;
 using TaskProTracker.MinimalAPI.Data;
 using TaskProTracker.MinimalAPI.Dtos;
 using TaskProTracker.MinimalAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TaskProTracker.MinimalAPI.Endpoints
 {
@@ -94,6 +97,32 @@ namespace TaskProTracker.MinimalAPI.Endpoints
 
                 return Results.Ok("User registered successfully.");
             });
+
+            app.MapPost("/upload", async Task<Results<Ok<string>, BadRequest<string>>> (HttpContext context, IFormFile file) =>
+            {
+                if (file == null || file.Length == 0)
+                {
+                    return TypedResults.BadRequest("No file was uploaded.");
+                }
+
+                var env = context.RequestServices.GetRequiredService<IWebHostEnvironment>();
+                var uploadDir = Path.Combine(env.ContentRootPath, "uploadFiles");
+                Directory.CreateDirectory(uploadDir);
+
+                var fileName = Guid.NewGuid().ToString("N") + Path.GetExtension(file.FileName);
+                var filePath = Path.Combine(uploadDir, fileName);
+
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await file.CopyToAsync(stream);
+
+                return TypedResults.Ok("File uploaded successfully!");
+            })
+            .Accepts<IFormFile>("multipart/form-data")
+            .WithSummary("uploads a file");
+        
         }
     }
 }
+
+
+

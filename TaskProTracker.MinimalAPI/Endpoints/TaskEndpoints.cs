@@ -10,24 +10,33 @@ namespace TaskProTracker.MinimalAPI.Endpoints
         public static void MapTaskEndpoints(this IEndpointRouteBuilder app)
         {
             RouteGroupBuilder taskItems = app.MapGroup("/tasks");
-            taskItems.MapGet("/", GetAllTasks);
-            taskItems.MapGet("/complete", GetCompletedTasks);
-            taskItems.MapGet("/{id}", GetTask);
-            taskItems.MapPost("/", CreateTask).RequireAuthorization();
-            taskItems.MapPut("/{id}", UpdateTask).RequireAuthorization();
-            taskItems.MapDelete("/{id}", DeleteTask).RequireAuthorization();
+            taskItems.MapGet("/", GetAllTasks)
+                .WithSummary("Gets the list of task items");
+            taskItems.MapGet("/complete", GetCompletedTasks)
+                 .WithSummary("Gets the list of completed task items");
+            taskItems.MapGet("/{id}", GetTask)
+                .WithSummary("Gets the task item by id");
+            taskItems.MapPost("/", CreateTask)
+                .WithSummary("creates task")
+                .RequireAuthorization();
+            taskItems.MapPut("/{id}", UpdateTask)
+                .WithSummary("updates task")
+                .RequireAuthorization();
+                
+            taskItems.MapDelete("/{id}", DeleteTask).WithSummary("deletes task")
+                .RequireAuthorization();
         }
-
+        
         static async Task<IResult> GetAllTasks(AppDbContext db)
         {
             return TypedResults.Ok(await db.Tasks.Select(x => new TaskItemDTO(x)).ToListAsync());
         }
-
+      
         static async Task<IResult> GetCompletedTasks(AppDbContext db)
         {
             return TypedResults.Ok(await db.Tasks.Where(t => t.IsCompleted).Select(x => new TaskItemDTO(x)).ToListAsync());
         }
-
+        
         static async Task<IResult> GetTask(int id, AppDbContext db)
         {
             return await db.Tasks.FindAsync(id)
@@ -35,7 +44,7 @@ namespace TaskProTracker.MinimalAPI.Endpoints
                     ? TypedResults.Ok(new TaskItemDTO(task))
                     : TypedResults.NotFound();
         }
-
+       
         static async Task<IResult> CreateTask(TaskItemDTO taskItemDTO, AppDbContext db)
         {
             var taskItem = new TaskItem

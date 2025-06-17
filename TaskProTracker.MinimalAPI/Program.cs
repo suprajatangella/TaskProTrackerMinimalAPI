@@ -58,8 +58,11 @@ builder.Services.AddOpenApi("v1", options =>
 {
     options.AddHeader("Version", "1.0");
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+    options.AddDocumentTransformer((doc, ctx, token) => {
+        doc.Info.Contact = new OpenApiContact { Name = "Supraja", Email = "supraja,tangella@gmail.com" };
+        return Task.CompletedTask;
+    });
 });
-
 var app = builder.Build();
 
 // Configure Middleware
@@ -68,18 +71,18 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Use the global error handler middleware
-app.UseGlobalExceptionHandler();
-
+//app.UseGlobalExceptionHandler();
 // Enable Swagger middleware
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapOpenApi("/openapi/{documentName}.yaml");
-    app.MapSwaggerUi();
-    //app.UseSwaggerUI(options =>
-    //{
-    //    options.SwaggerEndpoint("/openapi/v1.json", "v1");
-    //});
+    //app.MapOpenApi("/openapi/{documentName}.yaml");
+    //app.MapSwaggerUi();
+    app.UseSwaggerUI(
+    options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "v1");
+    });
 }
 
 // Map endpoints
@@ -87,6 +90,8 @@ app.MapTaskEndpoints();
 app.MapProjectEndpoints();
 app.MapCommentEndpoints();
 app.MapUserEndpoints();
+
+//app.UseRouting();
 
 app.Run();
 
