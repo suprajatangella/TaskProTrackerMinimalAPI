@@ -98,28 +98,25 @@ namespace TaskProTracker.MinimalAPI.Endpoints
                 return Results.Ok("User registered successfully.");
             });
 
-            app.MapPost("/upload", async Task<Results<Ok<string>, BadRequest<string>>> (HttpContext context, IFormFile file) =>
+            app.MapPost("/upload", async ([FromForm] IFormFile file) =>
             {
-                if (file == null || file.Length == 0)
+                try
                 {
-                    return TypedResults.BadRequest("No file was uploaded.");
+                    var fileSaveName = Guid.NewGuid().ToString("N") + Path.GetExtension(file.FileName);
+                    var filePath = Path.Combine("uploadFiles", fileSaveName);
+                    Directory.CreateDirectory("uploadFiles");
+                    await using var stream = new FileStream(filePath, FileMode.Create);
+                    await file.CopyToAsync(stream);
+                    return Results.Ok("File uploaded successfully!");
+                }
+                catch (Exception e)
+                {
+                    return Results.BadRequest("Unhandled Exception occured");
                 }
 
-                var env = context.RequestServices.GetRequiredService<IWebHostEnvironment>();
-                var uploadDir = Path.Combine(env.ContentRootPath, "uploadFiles");
-                Directory.CreateDirectory(uploadDir);
-
-                var fileName = Guid.NewGuid().ToString("N") + Path.GetExtension(file.FileName);
-                var filePath = Path.Combine(uploadDir, fileName);
-
-                await using var stream = new FileStream(filePath, FileMode.Create);
-                await file.CopyToAsync(stream);
-
-                return TypedResults.Ok("File uploaded successfully!");
-            })
+            }).DisableAntiforgery()
             .Accepts<IFormFile>("multipart/form-data")
             .WithSummary("uploads a file");
-        
         }
     }
 }

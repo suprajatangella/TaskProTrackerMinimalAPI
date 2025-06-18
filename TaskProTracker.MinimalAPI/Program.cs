@@ -63,26 +63,27 @@ builder.Services.AddOpenApi("v1", options =>
         return Task.CompletedTask;
     });
 });
+//builder.Services.AddAntiforgery();
 var app = builder.Build();
 
 // Configure Middleware
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
-
+//app.UseAntiforgery();
 // Use the global error handler middleware
-//app.UseGlobalExceptionHandler();
+app.UseGlobalExceptionHandler();
 // Enable Swagger middleware
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     //app.MapOpenApi("/openapi/{documentName}.yaml");
-    //app.MapSwaggerUi();
-    app.UseSwaggerUI(
-    options =>
-    {
-        options.SwaggerEndpoint("/openapi/v1.json", "v1");
-    });
+    app.MapSwaggerUi();
+    //app.UseSwaggerUI(
+    //options =>
+    //{
+    //    options.SwaggerEndpoint("/openapi/v1.json", "v1");
+    //});
 }
 
 // Map endpoints
