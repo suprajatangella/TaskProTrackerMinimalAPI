@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using TaskProTracker.MinimalAPI.Data;
 using TaskProTracker.MinimalAPI.Dtos;
 using TaskProTracker.MinimalAPI.Models;
@@ -9,7 +11,7 @@ namespace TaskProTracker.MinimalAPI.Endpoints
     {
         public static void MapProjectEndpoints(this IEndpointRouteBuilder app)
         {
-            RouteGroupBuilder Project = app.MapGroup("/Projects");
+            RouteGroupBuilder Project = app.MapGroup("/projects");
             Project.MapGet("/", GetAllProjects);
             Project.MapGet("/{id}", GetProject);
             Project.MapPost("/", CreateProject).RequireAuthorization();
@@ -17,33 +19,26 @@ namespace TaskProTracker.MinimalAPI.Endpoints
             Project.MapDelete("/{id}", DeleteProject).RequireAuthorization();
         }
 
-        static async Task<IResult> GetAllProjects(AppDbContext db)
+        public static async Task<Results<Ok<List<Project>>, NotFound>> GetAllProjects(AppDbContext db)
         {
-            return TypedResults.Ok(await db.Projects.Include(x=>x.User).ToListAsync());
+            var projects = await db.Projects.Include("Users").ToListAsync();
+            return projects.Count > 0 ? TypedResults.Ok(projects) : TypedResults.NotFound();
+        }
+        public static async Task<Results<Ok<Project>, NotFound>> GetProject(int id, AppDbContext db)
+        {
+            var project = await db.Projects.FindAsync(id);
+            return project is not null ? TypedResults.Ok(project) : TypedResults.NotFound();
         }
 
-        //static async Task<IResult> GetCompletedTasks(AppDbContext db)
-        //{
-        //    return TypedResults.Ok(await db.Tasks.Where(t => t.IsCompleted).Select(x => new TaskItemDTO(x)).ToListAsync());
-        //}
-
-        static async Task<IResult> GetProject(int id, AppDbContext db)
-        {
-            return await db.Projects.FindAsync(id)
-                is Project Project
-                    ? TypedResults.Ok(Project)
-                    : TypedResults.NotFound();
-        }
-
-        static async Task<IResult> CreateProject(Project proj, AppDbContext db)
+        public static async Task<Created<Project>> CreateProject(Project proj, AppDbContext db)
         {
             db.Projects.Add(proj);
             await db.SaveChangesAsync();
 
-            return TypedResults.Created($"/Projects/{proj.Id}", proj);
+            return TypedResults.Created($"/projects/{proj.Id}", proj);
         }
 
-        static async Task<IResult> UpdateProject(int id, Project proj, AppDbContext db)
+        public static async Task<Results<Created<Project>, NotFound>> UpdateProject(int id, Project proj, AppDbContext db)
         {
             var existingProj = await db.Projects.FindAsync(id);
 
@@ -51,11 +46,10 @@ namespace TaskProTracker.MinimalAPI.Endpoints
 
             db.Projects.Update(proj);
             await db.SaveChangesAsync();
-
-            return TypedResults.NoContent();
+            return TypedResults.Created($"/projects/{proj.Id}", proj);
         }
 
-        static async Task<IResult> DeleteProject(int id, AppDbContext db)
+        public static async Task<Results<NoContent, NotFound>> DeleteProject(int id, AppDbContext db)
         {
             if (await db.Projects.FindAsync(id) is Project proj)
             {

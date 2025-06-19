@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using TaskProTracker.MinimalAPI.Data;
 using TaskProTracker.MinimalAPI.Dtos;
 using TaskProTracker.MinimalAPI.Models;
@@ -17,49 +18,42 @@ namespace TaskProTracker.MinimalAPI.Endpoints
             comment.MapDelete("/{id}", DeleteComment).RequireAuthorization();
         }
 
-        static async Task<IResult> GetAllComments(AppDbContext db)
+        static async Task<Results<Ok<List<Comment>>, NotFound>> GetAllComments(AppDbContext db)
         {
-            return TypedResults.Ok(await db.Comments.Include(x=>x.User).ToListAsync());
+            var comments = await db.Comments.ToListAsync();
+            return comments.Count > 0 ? TypedResults.Ok(comments) : TypedResults.NotFound();
+        }
+        static async Task<Results<Ok<Comment>, NotFound>> GetComment(int id, AppDbContext db)
+        {
+            var comment = await db.Comments.FindAsync(id);
+            return comment is not null ? TypedResults.Ok(comment) : TypedResults.NotFound();
         }
 
-        //static async Task<IResult> GetCompletedTasks(AppDbContext db)
-        //{
-        //    return TypedResults.Ok(await db.Tasks.Where(t => t.IsCompleted).Select(x => new TaskItemDTO(x)).ToListAsync());
-        //}
-
-        static async Task<IResult> GetComment(int id, AppDbContext db)
+        static async Task<Created<Comment>> CreateComment(Comment comment, AppDbContext db)
         {
-            return await db.Comments.FindAsync(id)
-                is Comment Comment
-                    ? TypedResults.Ok(Comment)
-                    : TypedResults.NotFound();
-        }
-
-        static async Task<IResult> CreateComment(Comment proj, AppDbContext db)
-        {
-            db.Comments.Add(proj);
+            db.Comments.Add(comment);
             await db.SaveChangesAsync();
 
-            return TypedResults.Created($"/Comments/{proj.Id}", proj);
+            return TypedResults.Created($"/comments/{comment.Id}", comment);
         }
 
-        static async Task<IResult> UpdateComment(int id, Comment proj, AppDbContext db)
+        static async Task<Results<Created<Comment>, NotFound>> UpdateComment(int id, Comment comment, AppDbContext db)
         {
-            var existingProj = await db.Comments.FindAsync(id);
+            var existingComment = await db.Comments.FindAsync(id);
 
-            if (existingProj is null) return TypedResults.NotFound();
+            if (existingComment is null) return TypedResults.NotFound();
 
-            db.Comments.Update(proj);
+            db.Comments.Update(comment);
             await db.SaveChangesAsync();
 
-            return TypedResults.NoContent();
+            return TypedResults.Created($"/comments/{comment.Id}", comment);
         }
 
-        static async Task<IResult> DeleteComment(int id, AppDbContext db)
+        static async Task<Results<NoContent, NotFound>> DeleteComment(int id, AppDbContext db)
         {
-            if (await db.Comments.FindAsync(id) is Comment proj)
+            if (await db.Comments.FindAsync(id) is Comment comment)
             {
-                db.Comments.Remove(proj);
+                db.Comments.Remove(comment);
                 await db.SaveChangesAsync();
                 return TypedResults.NoContent();
             }
