@@ -14,6 +14,7 @@ TaskProTracker is a clean, modular, and production-ready .NET 8/9 Minimal API bu
 
 🚀 Included Features
 
+
 | Feature                  | Description                                                               |
 | -------------------------| ------------------------------------------------------------------------- |
 | ✅ Authentication        | Login endpoint issues JWT tokens after verifying hashed passwords         |
@@ -23,3 +24,6 @@ TaskProTracker is a clean, modular, and production-ready .NET 8/9 Minimal API bu
 | ✅ Swagger UI            | Interactive API documentation and request testing using **SwaggerGen**    |
 | ✅ Modular Endpoints     | Grouped route mappings for better organization and readability            |
 
+Swagger UI Screenshot:
+
+![image](https://github.com/user-attachments/assets/9a1bb1a2-7127-464b-83ef-fa44317e58e4)
