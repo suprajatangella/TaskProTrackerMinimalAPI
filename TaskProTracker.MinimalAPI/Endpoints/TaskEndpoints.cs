@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using TaskProTracker.MinimalAPI.Data;
 using TaskProTracker.MinimalAPI.Dtos;
@@ -22,6 +23,7 @@ namespace TaskProTracker.MinimalAPI.Endpoints
                 .WithSummary("creates task")
                 .RequireAuthorization();
             taskItems.MapPut("/{id}", UpdateTask)
+                .ProducesValidationProblem()
                 .WithSummary("updates task")
                 .RequireAuthorization();
                 
@@ -62,8 +64,19 @@ namespace TaskProTracker.MinimalAPI.Endpoints
             return TypedResults.Created($"/taskitems/{taskItem.Id}", taskItem);
         }
 
-        public static async Task<Results<Created<TaskItem>, NotFound>> UpdateTask(int id, TaskItemDTO taskItemDTO, AppDbContext db)
+        public static async Task<Results<Created<TaskItem>, NotFound, ValidationProblem>> UpdateTask(int id, TaskItemDTO taskItemDTO, AppDbContext db)
         {
+            var validationResults = new List<ValidationResult>();
+            var context = new ValidationContext(taskItemDTO, null, null);
+
+            if (!Validator.TryValidateObject(taskItemDTO, context, validationResults, true))
+            {
+                var errorDict = validationResults.ToDictionary(
+                v => v.MemberNames.FirstOrDefault() ?? "",
+                v => new[] { v.ErrorMessage ?? "" });
+
+                return TypedResults.ValidationProblem(errorDict);
+            }
             var task = await db.Tasks.FindAsync(id);
 
             if (task is null) return TypedResults.NotFound();
