@@ -57,6 +57,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi("v1", options =>
 {
     options.AddHeader("Version", "1.0");
+    options.AddSchemaTransformer<AddExternalDocsTransformer>();
+    options.AddOperationTransformer<AddExternalDocsTransformer>();
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
     options.AddDocumentTransformer((doc, ctx, token) => {
         doc.Info.Contact = new OpenApiContact { Name = "Supraja", Email = "supraja,tangella@gmail.com" };
