@@ -99,7 +99,7 @@ namespace TaskProTracker.Tests
             await using var context = new MockDb().CreateDbContext();
 
             context.Users.Add(new User { Id = 1, Name = "Admin", Email = "Admin@gmail.com", PasswordHash = "Admin@123", Role = "Admin" });
-            var newProj = new Project { Id = 1, Title = "Test Project", Description = "Creating Unit tests", UserId = 1 };
+            var newProj = new Project { Title = "Test Project", Description = "Creating Unit tests", UserId = 1 };
             //var newTask = new ProjectDTO { Title = "Test title", ProjectId = 1, IsCompleted = false };
 
             //Act
@@ -168,7 +168,7 @@ namespace TaskProTracker.Tests
             await context.SaveChangesAsync();
 
             //Act
-            var result = await TaskEndpoints.DeleteTask(1, context);
+            var result = await ProjectEndpoints.DeleteProject(1, context);
 
             //Assert
             Assert.IsType<Results<NoContent, NotFound>>(result);

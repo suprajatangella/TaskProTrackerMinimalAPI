@@ -42,9 +42,16 @@ namespace TaskProTracker.MinimalAPI.Endpoints
         {
             var existingProj = await db.Projects.FindAsync(id);
 
-            if (existingProj is null) return TypedResults.NotFound();
+            if (existingProj is null) 
+                return TypedResults.NotFound();
+            else
+            {
+                existingProj.Description = !string.IsNullOrEmpty(proj.Description) ? proj.Description : existingProj.Description;
+                existingProj.Title = !string.IsNullOrEmpty(proj.Title) ? proj.Title : existingProj.Title;
+                existingProj.UserId = (proj.UserId >0) ? proj.UserId : existingProj.UserId;
+            }
 
-            db.Projects.Update(proj);
+            db.Projects.Update(existingProj);
             await db.SaveChangesAsync();
             return TypedResults.Created($"/projects/{proj.Id}", proj);
         }
