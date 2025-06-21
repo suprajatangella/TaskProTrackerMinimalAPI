@@ -21,7 +21,7 @@ namespace TaskProTracker.MinimalAPI.Endpoints
 
         public static async Task<Results<Ok<List<Project>>, NotFound>> GetAllProjects(AppDbContext db)
         {
-            var projects = await db.Projects.Include("Users").ToListAsync();
+            var projects = await db.Projects.Include( p => p.User ).ToListAsync();
             return projects.Count > 0 ? TypedResults.Ok(projects) : TypedResults.NotFound();
         }
         public static async Task<Results<Ok<Project>, NotFound>> GetProject(int id, AppDbContext db)

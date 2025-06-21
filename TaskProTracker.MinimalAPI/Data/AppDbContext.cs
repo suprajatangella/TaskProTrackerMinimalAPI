@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using TaskProTracker.MinimalAPI.Models;
 
 namespace TaskProTracker.MinimalAPI.Data
@@ -12,5 +13,6 @@ namespace TaskProTracker.MinimalAPI.Data
         public DbSet<Project> Projects => Set<Project>();
         public DbSet<TaskItem> Tasks => Set<TaskItem>();
         public DbSet<Comment> Comments => Set<Comment>();
+
     }
 }

@@ -47,9 +47,9 @@ namespace TaskProTracker.Tests
             var result = await ProjectEndpoints.GetAllProjects(context);
 
             //Assert
-            Assert.IsType<Ok<List<Project>>>(result);
+            Assert.IsType<Results<Ok<List<Project>>, NotFound>>(result);
 
-            var okResult = Assert.IsType<OkObjectResult>(result.Result); // Cast the Results
+            var okResult = (Ok<List<Project>>)(result.Result); // Cast the Results
             var projects = Assert.IsAssignableFrom<IEnumerable<Project>>(okResult.Value); // Get the data
 
             Assert.NotEmpty(projects); // Now this works, because 'todos' is IEnumerable

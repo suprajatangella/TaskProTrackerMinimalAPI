@@ -52,7 +52,7 @@ namespace TaskProTracker.Tests
             if (result.Result is Ok<List<TaskItem>> okResult)
             {
                 var tasks = okResult.Value;
-                Assert.NotEmpty(tasks!); // Now this works, because 'todos' is IEnumerable
+                Assert.NotEmpty(tasks!); 
                 Assert.Collection(tasks!,
                     task1 =>
                     {
@@ -148,37 +148,16 @@ namespace TaskProTracker.Tests
             //Assert
             Assert.IsType<Results<Created<TaskItem>, NotFound, ValidationProblem>>(result);
 
-            switch (result.Result)
-            {
-                case Created<TaskItem> created:
-                    Assert.NotNull(created.Value);
-                    Assert.NotNull(created.Location);
-                    var taskInDb = await context.Tasks.FindAsync(1);
+            var created = (Created<TaskItem>)result.Result;
+            Assert.NotNull(created.Value);
+            Assert.NotNull(created.Location);
+            var taskInDb = await context.Tasks.FindAsync(1);
 
-                    Assert.NotNull(taskInDb);
-                    Assert.Equal("Updated test title", taskInDb!.Title);
-                    Assert.True(taskInDb.IsCompleted);
-
-                    break;
-                case ValidationProblem validation:
-                    var errors = validation.ProblemDetails;
-                    Assert.NotNull(errors.Errors);
-                    break;
-                case NotFound:
-                    Assert.Fail("Expected Created but got NotFound");
-                    break;
-                default:
-                    Assert.Fail("Unexpected result type");
-                    break;
-            }
-
-
-            //var createdResult = (Created<TaskItem>)result.Result;
-
-            //Assert.NotNull(createdResult);
-            //Assert.NotNull(createdResult.Location);
-
-            
+            Assert.NotNull(taskInDb);
+            Assert.Equal(1, taskInDb.Id);
+            Assert.Equal("Updated test title", taskInDb!.Title);
+            Assert.Equal(1, taskInDb!.ProjectId);
+            Assert.True(taskInDb.IsCompleted);            
         }
 
         [Fact]
