@@ -13,6 +13,7 @@ using TaskProTracker.Tests.Helpers;
 
 namespace TaskProTracker.Tests
 {
+    [Collection("Logger Collection")]
     public class ProjectInMemoryTests
     {
         private readonly Serilog.ILogger _log;

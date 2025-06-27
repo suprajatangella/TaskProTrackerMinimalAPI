@@ -18,18 +18,18 @@ namespace TaskProTracker.MinimalAPI.Endpoints
             comment.MapDelete("/{id}", DeleteComment).RequireAuthorization();
         }
 
-        static async Task<Results<Ok<List<Comment>>, NotFound>> GetAllComments(AppDbContext db)
+        public static async Task<Results<Ok<List<Comment>>, NotFound>> GetAllComments(AppDbContext db)
         {
             var comments = await db.Comments.ToListAsync();
             return comments.Count > 0 ? TypedResults.Ok(comments) : TypedResults.NotFound();
         }
-        static async Task<Results<Ok<Comment>, NotFound>> GetComment(int id, AppDbContext db)
+        public static async Task<Results<Ok<Comment>, NotFound>> GetComment(int id, AppDbContext db)
         {
             var comment = await db.Comments.FindAsync(id);
             return comment is not null ? TypedResults.Ok(comment) : TypedResults.NotFound();
         }
 
-        static async Task<Created<Comment>> CreateComment(Comment comment, AppDbContext db)
+        public static async Task<Created<Comment>> CreateComment(Comment comment, AppDbContext db)
         {
             db.Comments.Add(comment);
             await db.SaveChangesAsync();
@@ -37,19 +37,24 @@ namespace TaskProTracker.MinimalAPI.Endpoints
             return TypedResults.Created($"/comments/{comment.Id}", comment);
         }
 
-        static async Task<Results<Created<Comment>, NotFound>> UpdateComment(int id, Comment comment, AppDbContext db)
+        public static async Task<Results<Created<Comment>, NotFound>> UpdateComment(int id, Comment comment, AppDbContext db)
         {
             var existingComment = await db.Comments.FindAsync(id);
 
             if (existingComment is null) return TypedResults.NotFound();
+            // Update the existing comment with the new values
+            existingComment.Content = comment.Content;
+            existingComment.TaskItemId = comment.TaskItemId;
+            existingComment.UserId = comment.UserId;
+            // Save the changes to the database
 
-            db.Comments.Update(comment);
+            db.Comments.Update(existingComment);
             await db.SaveChangesAsync();
 
             return TypedResults.Created($"/comments/{comment.Id}", comment);
         }
 
-        static async Task<Results<NoContent, NotFound>> DeleteComment(int id, AppDbContext db)
+        public static async Task<Results<NoContent, NotFound>> DeleteComment(int id, AppDbContext db)
         {
             if (await db.Comments.FindAsync(id) is Comment comment)
             {
