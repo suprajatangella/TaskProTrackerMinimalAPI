@@ -1,12 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskProTracker.MinimalAPI.Dtos;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 using TaskProTracker.MinimalAPI.Endpoints;
 using TaskProTracker.MinimalAPI.Models;
 using TaskProTracker.Tests.Helpers;

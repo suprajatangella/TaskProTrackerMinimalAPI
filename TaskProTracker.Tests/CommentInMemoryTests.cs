@@ -1,12 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskProTracker.MinimalAPI.Dtos;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 using TaskProTracker.MinimalAPI.Endpoints;
 using TaskProTracker.MinimalAPI.Models;
 using TaskProTracker.Tests.Helpers;
@@ -174,7 +166,7 @@ namespace TaskProTracker.Tests
                 context.Users.Add(new User { Id = 1, Name = "Admin", Email = "Admin@gmail.com", PasswordHash = "Admin@123", Role = "Admin" });
                 context.Projects.Add(new Project { Id = 1, Title = "Test Project", Description = "Creating Unit tests", UserId = 1 });
                 context.Tasks.Add(new TaskItem { Id = 1, Title = "Test title 1", ProjectId = 1, IsCompleted = false });
-                context.Comments.Add(new Comment { Id = 1, Content = "Test Content", UserId = 1, TaskItemId=1 });
+                context.Comments.Add(new Comment { Id = 1, Content = "Test Content", UserId = 1, TaskItemId = 1 });
 
                 await context.SaveChangesAsync();
 

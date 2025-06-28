@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 using TaskProTracker.MinimalAPI.Data;
-using TaskProTracker.MinimalAPI.Dtos;
 using TaskProTracker.MinimalAPI.Models;
 
 namespace TaskProTracker.MinimalAPI.Endpoints
@@ -21,7 +19,7 @@ namespace TaskProTracker.MinimalAPI.Endpoints
 
         public static async Task<Results<Ok<List<Project>>, NotFound>> GetAllProjects(AppDbContext db)
         {
-            var projects = await db.Projects.Include( p => p.User ).ToListAsync();
+            var projects = await db.Projects.Include(p => p.User).ToListAsync();
             return projects.Count > 0 ? TypedResults.Ok(projects) : TypedResults.NotFound();
         }
         public static async Task<Results<Ok<Project>, NotFound>> GetProject(int id, AppDbContext db)
@@ -42,13 +40,13 @@ namespace TaskProTracker.MinimalAPI.Endpoints
         {
             var existingProj = await db.Projects.FindAsync(id);
 
-            if (existingProj is null) 
+            if (existingProj is null)
                 return TypedResults.NotFound();
             else
             {
                 existingProj.Description = !string.IsNullOrEmpty(proj.Description) ? proj.Description : existingProj.Description;
                 existingProj.Title = !string.IsNullOrEmpty(proj.Title) ? proj.Title : existingProj.Title;
-                existingProj.UserId = (proj.UserId >0) ? proj.UserId : existingProj.UserId;
+                existingProj.UserId = (proj.UserId > 0) ? proj.UserId : existingProj.UserId;
             }
 
             db.Projects.Update(existingProj);

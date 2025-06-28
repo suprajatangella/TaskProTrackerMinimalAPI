@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TaskProTracker.MinimalAPI.Data;
-using TaskProTracker.MinimalAPI.Dtos;
 using TaskProTracker.MinimalAPI.Models;
 
 namespace TaskProTracker.MinimalAPI.Endpoints

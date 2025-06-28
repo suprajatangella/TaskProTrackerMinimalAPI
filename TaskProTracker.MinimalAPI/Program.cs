@@ -33,7 +33,7 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
- var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
           .AddJwtBearer(options =>
@@ -60,7 +60,8 @@ builder.Services.AddOpenApi("v1", options =>
     options.AddSchemaTransformer<AddExternalDocsTransformer>();
     options.AddOperationTransformer<AddExternalDocsTransformer>();
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
-    options.AddDocumentTransformer((doc, ctx, token) => {
+    options.AddDocumentTransformer((doc, ctx, token) =>
+    {
         doc.Info.Contact = new OpenApiContact { Name = "Supraja", Email = "supraja,tangella@gmail.com" };
         return Task.CompletedTask;
     });

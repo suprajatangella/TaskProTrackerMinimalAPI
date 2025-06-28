@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using TaskProTracker.MinimalAPI.Data;
 using TaskProTracker.MinimalAPI.Dtos;
 using TaskProTracker.MinimalAPI.Models;
@@ -26,29 +25,29 @@ namespace TaskProTracker.MinimalAPI.Endpoints
                 .ProducesValidationProblem()
                 .WithSummary("updates task")
                 .RequireAuthorization();
-                
+
             taskItems.MapDelete("/{id}", DeleteTask).WithSummary("deletes task")
                 .RequireAuthorization();
         }
-        
+
         public static async Task<Results<Ok<List<TaskItem>>, NotFound>> GetAllTasks(AppDbContext db)
         {
             var tasks = await db.Tasks.ToListAsync();
             return tasks.Count > 0 ? TypedResults.Ok(tasks) : TypedResults.NotFound();
         }
-      
+
         public static async Task<Results<Ok<List<TaskItem>>, NotFound>> GetCompletedTasks(AppDbContext db)
         {
             var completedTasks = await db.Tasks.Where(t => t.IsCompleted).ToListAsync();
-            return completedTasks.Count > 0 ? TypedResults.Ok(completedTasks) : TypedResults.NotFound(); 
+            return completedTasks.Count > 0 ? TypedResults.Ok(completedTasks) : TypedResults.NotFound();
         }
-        
+
         public static async Task<Results<Ok<TaskItem>, NotFound>> GetTask(int id, AppDbContext db)
         {
             var task = await db.Tasks.FindAsync(id);
             return task is not null ? TypedResults.Ok(task) : TypedResults.NotFound();
         }
-       
+
         public static async Task<Created<TaskItem>> CreateTask(TaskItemDTO taskItemDTO, AppDbContext db)
         {
             var taskItem = new TaskItem

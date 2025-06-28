@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +9,6 @@ using System.Text;
 using TaskProTracker.MinimalAPI.Data;
 using TaskProTracker.MinimalAPI.Dtos;
 using TaskProTracker.MinimalAPI.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace TaskProTracker.MinimalAPI.Endpoints
 {
