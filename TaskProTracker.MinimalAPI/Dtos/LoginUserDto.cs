@@ -11,5 +11,6 @@ namespace TaskProTracker.MinimalAPI.Dtos
         [Required(ErrorMessage = "Password is required")]
         [MinLength(6, ErrorMessage = "Minimum length should be 6 characters")]
         public string Password { get; set; }
+
     }
 }

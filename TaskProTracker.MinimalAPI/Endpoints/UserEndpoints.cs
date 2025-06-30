@@ -18,15 +18,6 @@ namespace TaskProTracker.MinimalAPI.Endpoints
         {
             app.MapPost("/login", async (LoginUserDto userDto, AppDbContext db, IConfiguration config) =>
             {
-                var validationResults = new List<ValidationResult>();
-                var context = new ValidationContext(userDto);
-
-                if (!Validator.TryValidateObject(userDto, context, validationResults, true))
-                {
-                    var errors = validationResults.Select(r => r.ErrorMessage);
-                    return Results.BadRequest(errors);
-                }
-
                 var existingUser = await db.Users.FirstOrDefaultAsync(u => u.Email == userDto.Email);
                 if (existingUser == null)
                 {
@@ -42,9 +33,9 @@ namespace TaskProTracker.MinimalAPI.Endpoints
 
                 var claims = new[]
                 {
-        new Claim(ClaimTypes.Name, userDto.Email),
-        new Claim(ClaimTypes.Role, existingUser.Role)
-    };
+                    new Claim(ClaimTypes.Name, userDto.Email),
+                    new Claim(ClaimTypes.Role, existingUser.Role)
+                };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetValue<string>("JwtSettings:Key")));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -61,19 +52,12 @@ namespace TaskProTracker.MinimalAPI.Endpoints
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
                 return Results.Ok(new { token = tokenString });
-            });
+            })
+            .AddEndpointFilter<ValidationFilter<LoginUserDto>>();
 
             app.MapPost("/register", async (RegisterUserDto dto, AppDbContext dbContext) =>
             {
-                var validationResults = new List<ValidationResult>();
-                var context = new ValidationContext(dto);
-
-                if (!Validator.TryValidateObject(dto, context, validationResults, true))
-                {
-                    var errors = validationResults.Select(r => r.ErrorMessage);
-                    return Results.BadRequest(errors);
-                }
-
+               
                 var existingUser = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
                 if (existingUser != null)
                 {
@@ -94,7 +78,8 @@ namespace TaskProTracker.MinimalAPI.Endpoints
                 await dbContext.SaveChangesAsync();
 
                 return Results.Ok("User registered successfully.");
-            });
+            })
+            .AddEndpointFilter<ValidationFilter<RegisterUserDto>>(); ;
 
             app.MapPost("/upload", async ([FromForm] IFormFile file) =>
             {

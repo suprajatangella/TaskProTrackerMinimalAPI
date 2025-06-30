@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using TaskProTracker.MinimalAPI.Dtos;
 using TaskProTracker.MinimalAPI.Endpoints;
 using TaskProTracker.MinimalAPI.Models;
 using TaskProTracker.Tests.Helpers;
@@ -124,11 +125,11 @@ namespace TaskProTracker.Tests
                 await using var context = new MockDb().CreateDbContext();
 
                 context.Users.Add(new User { Id = 1, Name = "Admin", Email = "Admin@gmail.com", PasswordHash = "Admin@123", Role = "Admin" });
-                var newProj = new Project { Title = "Test Project", Description = "Creating Unit tests", UserId = 1 };
+                var projDto = new ProjectDto { Title = "Test Project", Description = "Creating Unit tests", UserId = 1 };
                 //var newTask = new ProjectDTO { Title = "Test title", ProjectId = 1, IsCompleted = false };
 
                 //Act
-                var result = await ProjectEndpoints.CreateProject(newProj, context);
+                var result = await ProjectEndpoints.CreateProject(projDto, context);
 
                 //Assert
                 Assert.IsType<Created<Project>>(result);
@@ -164,7 +165,7 @@ namespace TaskProTracker.Tests
 
                 await context.SaveChangesAsync();
 
-                var updatedProj = new Project
+                var updatedProj = new ProjectDto
                 {
                     Id = 1,
                     Title = "Updated Test Project",

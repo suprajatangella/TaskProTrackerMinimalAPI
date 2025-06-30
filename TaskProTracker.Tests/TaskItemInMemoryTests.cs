@@ -134,7 +134,7 @@ namespace TaskProTracker.Tests
                 //Assert
                 Assert.IsType<Created<TaskItem>>(result);
 
-                Assert.NotNull(result);
+                Assert.NotNull(result.Value);
                 Assert.NotNull(result.Location);
 
                 Assert.NotEmpty(context.Tasks);
@@ -179,7 +179,7 @@ namespace TaskProTracker.Tests
                 var result = await TaskEndpoints.UpdateTask(updatedTaskDto.Id, updatedTaskDto, context);
 
                 //Assert
-                Assert.IsType<Results<Created<TaskItem>, NotFound, ValidationProblem>>(result);
+                Assert.IsType<Results<Created<TaskItem>, NotFound>>(result);
 
                 var created = (Created<TaskItem>)result.Result;
                 Assert.NotNull(created.Value);

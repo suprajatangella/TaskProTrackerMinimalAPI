@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using TaskProTracker.MinimalAPI.Dtos;
 using TaskProTracker.MinimalAPI.Endpoints;
 using TaskProTracker.MinimalAPI.Models;
 using TaskProTracker.Tests.Helpers;
@@ -129,10 +130,10 @@ namespace TaskProTracker.Tests
                 context.Users.Add(new User { Id = 1, Name = "Admin", Email = "Admin@gmail.com", PasswordHash = "Admin@123", Role = "Admin" });
                 context.Projects.Add(new Project { Id = 1, Title = "Test Project", Description = "Creating Unit tests", UserId = 1 });
                 context.Tasks.Add(new TaskItem { Id = 1, Title = "Test title 1", ProjectId = 1, IsCompleted = false });
-                var comment = new Comment { Content = "Test Content 1", TaskItemId = 1, UserId = 1 };
+                var commentDto = new CommentDto { Content = "Test Content 1", TaskItemId = 1, UserId = 1 };
 
                 //Act
-                var result = await CommentEndpoints.CreateComment(comment, context);
+                var result = await CommentEndpoints.CreateComment(commentDto, context);
 
                 //Assert
                 Assert.IsType<Created<Comment>>(result);
@@ -170,7 +171,7 @@ namespace TaskProTracker.Tests
 
                 await context.SaveChangesAsync();
 
-                var updatedComment = new Comment
+                var updatedComment = new CommentDto
                 {
                     Id = 1,
                     Content = "Updated Test Content",
