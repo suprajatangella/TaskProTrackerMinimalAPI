@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -57,7 +56,7 @@ namespace TaskProTracker.MinimalAPI.Endpoints
 
             app.MapPost("/register", async (RegisterUserDto dto, AppDbContext dbContext) =>
             {
-               
+
                 var existingUser = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
                 if (existingUser != null)
                 {

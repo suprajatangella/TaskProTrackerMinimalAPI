@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Json;
 using TaskProTracker.MinimalAPI.Dtos;
-using TaskProTracker.MinimalAPI.Models;
 using TaskProTraker.IntegrationTests.Helpers;
 using Xunit;
 
