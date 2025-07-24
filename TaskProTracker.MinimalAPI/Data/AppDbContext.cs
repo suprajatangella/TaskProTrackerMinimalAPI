@@ -12,5 +12,14 @@ namespace TaskProTracker.MinimalAPI.Data
         public DbSet<TaskItem> Tasks => Set<TaskItem>();
         public DbSet<Comment> Comments => Set<Comment>();
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            System.Diagnostics.Debugger.Launch();
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<TaskItem>()
+            .HasOne(t => t.Project) 
+            .WithMany(p=>p.Tasks);
+        }
+
     }
 }

@@ -53,7 +53,8 @@ namespace TaskProTracker.MinimalAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
-                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                    ProjectId = table.Column<int>(type: "int", nullable: false),
+                    CommentId = table.Column<int>(type: "int", nullable: false) // Uncomment if you want to include comments directly in tasks
                 },
                 constraints: table =>
                 {
@@ -98,10 +99,10 @@ namespace TaskProTracker.MinimalAPI.Migrations
                 table: "Comments",
                 column: "TaskItemId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId",
-                table: "Comments",
-                column: "UserId");
+            //migrationBuilder.CreateIndex(
+            //    name: "IX_Comments_UserId",
+            //    table: "Comments",
+            //    column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",

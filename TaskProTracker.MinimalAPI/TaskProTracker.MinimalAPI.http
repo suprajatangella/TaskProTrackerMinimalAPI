@@ -21,7 +21,7 @@ Content-Type: application/json
 {
   "name":"Supraja",
   "email":"supraja@gmail.com",
-  "password":"supraja@123",
+  "password":"Supraja@123",
   "role":"User"
 }
 
@@ -68,5 +68,9 @@ Content-Type: application/json
 {
   //TaskItemDTO
 }
+
+###
+
+GET {{TaskProTracker.MinimalAPI_HostAddress}}/swagger/{documentName}
 
 ###

@@ -11,8 +11,8 @@ using TaskProTracker.MinimalAPI.Data;
 namespace TaskProTracker.MinimalAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250610103743_Init")]
-    partial class Init
+    [Migration("20250724012102_projectFieldAdded")]
+    partial class projectFieldAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace TaskProTracker.MinimalAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TaskProTracker.MinimalAPI.Models.Project", b =>
+            modelBuilder.Entity("TaskProTracker.MinimalAPI.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,11 +44,7 @@ namespace TaskProTracker.MinimalAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TaskItemId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Projects");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("TaskProTracker.MinimalAPI.Models.Project", b =>
@@ -91,17 +87,11 @@ namespace TaskProTracker.MinimalAPI.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CommentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-                    b.HasIndex("CommentId");
 
                     b.ToTable("Tasks");
                 });
@@ -122,6 +112,14 @@ namespace TaskProTracker.MinimalAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -129,61 +127,14 @@ namespace TaskProTracker.MinimalAPI.Migrations
 
             modelBuilder.Entity("TaskProTracker.MinimalAPI.Models.Project", b =>
                 {
-                    b.HasOne("TaskProTracker.MinimalAPI.Models.TaskItem", "TaskItem")
-                        .WithMany("Comments")
-                        .HasForeignKey("TaskItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TaskProTracker.MinimalAPI.Models.User", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TaskItem");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TaskProTracker.MinimalAPI.Models.Project", b =>
-                {
-                    b.HasOne("TaskProTracker.MinimalAPI.Models.User", "User")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
-
-            modelBuilder.Entity("TaskProTracker.MinimalAPI.Models.TaskItem", b =>
-                {
-                    b.HasOne("TaskProTracker.MinimalAPI.Models.Project", "Project")
-                        .WithMany("Tasks")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("TaskProTracker.MinimalAPI.Models.Project", b =>
-                {
-                    b.Navigation("Tasks");
-                });
-
-            //modelBuilder.Entity("TaskProTracker.MinimalAPI.Models.TaskItem", b =>
-            //    {
-            //        b.Navigation("Projects");
-            //    });
-
-            //modelBuilder.Entity("TaskProTracker.MinimalAPI.Models.User", b =>
-            //    {
-            //        b.Navigation("Comments");
-
-            //        b.Navigation("Comments");
-            //    });
 #pragma warning restore 612, 618
         }
     }
