@@ -23,6 +23,9 @@ TaskProTracker is a clean, modular, and production-ready .NET 8/9 Minimal API bu
 | ✅ Logging               | Application logging with **Serilog**, configurable for console or file    |
 | ✅ Swagger UI            | Interactive API documentation and request testing using **SwaggerGen**    |
 | ✅ Modular Endpoints     | Grouped route mappings for better organization and readability            |
+| ✅ Unit Tests            | Created and tested each method in all end points using in-memory database.|
+| ✅ Integration Tests     | Created and tested special methods in all end points using sql server.    |
+
 
 Swagger UI Screenshot:
 
