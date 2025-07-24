@@ -14,7 +14,6 @@ namespace TaskProTracker.MinimalAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            System.Diagnostics.Debugger.Launch();
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<TaskItem>()
             .HasOne(t => t.Project) 
