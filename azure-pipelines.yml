@@ -1,0 +1,49 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  name: Default
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+
+# Run tests (your unit test project using MockDb)
+- task: DotNetCoreCLI@2
+  displayName: 'Run Unit Tests'
+  inputs:
+    command: 'test'
+    projects: '**/*.Tests.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish API Project'
+  condition: succeeded()
+  inputs:
+    azureSubscription: 'Azure subscription 1(6e8f92a1-933a-4c66-b0b2-78375012c12c)'
+    command: 'publish'
+    publishWebProjects: false
+    projects: '**/TaskProTracker.MinimalAPI.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: SqlAzureDacpacDeployment@1
+  displayName: Execute Azure SQL 
+  inputs:
+    azureSubscription: 'Azure subscription 1(6e8f92a1-933a-4c66-b0b2-78375012c12c)'
+    AuthenticationType: 'server'
+    ServerName: 'tcp:taskapi-db-server.database.windows.net'
+    DatabaseName: 'TraskProTrackerAzureDb'
+    SqlUsername: 'sqladmin'
+    SqlPassword: '$(dbPassword)'
+    deployType: 'DacpacTask'
+    DeploymentAction: 'Publish'
+    DacpacFile: '$(System.DefaultWorkingDirectory)/TaskProTracker.MinimalAPI/Database/dacpac/TaskProDb.dacpac'
+    IpDetectionMethod: 'AutoDetect'
