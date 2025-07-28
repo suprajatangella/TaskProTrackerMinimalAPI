@@ -44,16 +44,16 @@ steps:
     projects: '**/TaskProTracker.MinimalAPI.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
-- task: SqlAzureDacpacDeployment@1
-  displayName: Execute Azure SQL 
-  inputs:
-    azureSubscription: 'Azure subscription 1(6e8f92a1-933a-4c66-b0b2-78375012c12c)'
-    AuthenticationType: 'server'
-    ServerName: 'tcp:taskapi-db-server.database.windows.net'
-    DatabaseName: 'TraskProTrackerAzureDb'
-    SqlUsername: 'sqladmin'
-    SqlPassword: '$(dbPassword)'
-    deployType: 'DacpacTask'
-    DeploymentAction: 'Publish'
-    DacpacFile: '$(System.DefaultWorkingDirectory)/TaskProTracker.MinimalAPI/Database/dacpac/TaskProDb.dacpac'
-    IpDetectionMethod: 'AutoDetect'
+#- task: SqlAzureDacpacDeployment@1
+#  displayName: Execute Azure SQL 
+#  inputs:
+#    azureSubscription: 'Azure subscription 1(6e8f92a1-933a-4c66-b0b2-78375012c12c)'
+#    AuthenticationType: 'server'
+#    ServerName: 'tcp:taskapi-db-server.database.windows.net'
+#    DatabaseName: 'TraskProTrackerAzureDb'
+#    SqlUsername: 'sqladmin'
+#    SqlPassword: '$(dbPassword)'
+#    deployType: 'DacpacTask'
+#    DeploymentAction: 'Publish'
+#    DacpacFile: '$(System.DefaultWorkingDirectory)/TaskProTracker.MinimalAPI/Database/dacpac/TaskProDb.dacpac'
+#    IpDetectionMethod: 'AutoDetect'
