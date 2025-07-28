@@ -25,10 +25,10 @@ steps:
     arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage"'
 
 # 3. Publish Code Coverage Results
-- script: |
-    nyc --reporter=cobertura --reporter=html \
-    npm test -- --reporter mocha-junit-reporter --reporter-options mochaFile=./test-results.xml
-  displayName: 'Build code coverage report'
+#- script: |
+#    nyc --reporter=cobertura --reporter=html \
+#    npm test -- --reporter mocha-junit-reporter --reporter-options mochaFile=./test-results.xml
+#  displayName: 'Build code coverage report'
 
 - task: PublishCodeCoverageResults@2
   inputs: 
