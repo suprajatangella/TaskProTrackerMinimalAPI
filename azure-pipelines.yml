@@ -32,7 +32,8 @@ steps:
 
 - task: PublishCodeCoverageResults@2
   inputs: 
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.cobertura.xml'
+
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish API Project'
