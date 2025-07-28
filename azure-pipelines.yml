@@ -22,7 +22,17 @@ steps:
   inputs:
     command: 'test'
     projects: '**/*.Tests.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage"'
+
+# 3. Publish Code Coverage Results
+- script: |
+    nyc --reporter=cobertura --reporter=html \
+    npm test -- --reporter mocha-junit-reporter --reporter-options mochaFile=./test-results.xml
+  displayName: 'Build code coverage report'
+
+- task: PublishCodeCoverageResults@2
+  inputs: 
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish API Project'
