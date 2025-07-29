@@ -41,7 +41,7 @@ steps:
   displayName: 'Publish API Project'
   condition: succeeded()
   inputs:
-    azureSubscription: 'Azure subscription 1(6e8f92a1-933a-4c66-b0b2-78375012c12c)'
+    azureSubscription: '$(azureSubscription)'
     command: 'publish'
     publishWebProjects: false
     projects: '**/TaskProTracker.MinimalAPI.csproj'
@@ -50,7 +50,7 @@ steps:
 #- task: SqlAzureDacpacDeployment@1
 #  displayName: Execute Azure SQL 
 #  inputs:
-#    azureSubscription: 'Azure subscription 1(6e8f92a1-933a-4c66-b0b2-78375012c12c)'
+#    azureSubscription: '$(azureSubscription)'
 #    AuthenticationType: 'server'
 #    ServerName: 'tcp:taskapi-db-server.database.windows.net'
 #    DatabaseName: 'TraskProTrackerAzureDb'
